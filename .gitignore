@@ -17,6 +17,8 @@ eggs/
 lib/
 lib64/
 parts/
+reports/allure/
+reports/web/
 sdist/
 var/
 wheels/
