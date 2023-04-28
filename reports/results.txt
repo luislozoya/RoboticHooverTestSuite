@@ -1,0 +1,207 @@
+Feature: Hoover service testing # features/hoover.feature:1
+
+  @skip
+  Scenario Outline: Hoover navigates the room and cleans patches of dirt -- @1.1   # features/hoover.feature:15
+    Given a room with dimensions "5" by "5"                                        # features/steps/hoover_functional_steps.py:9
+    And a hoover starting at position "1", "2"                                     # features/steps/hoover_functional_steps.py:15
+    And the following patches of dirt: "1,0;2,2;2,3"                               # features/steps/hoover_functional_steps.py:21
+    When the hoover moves according to "NNESEESWNWW"                               # features/steps/hoover_functional_steps.py:26
+    Then the final position of the hoover should be "1", "3"                       # features/steps/hoover_functional_steps.py:34
+    And the number of cleaned patches should be "1"                                # features/steps/hoover_functional_steps.py:40
+      Assertion Failed: Expected 1 but got 4
+
+
+  @skip
+  Scenario Outline: Hoover navigates the room and cleans patches of dirt -- @1.2   # features/hoover.feature:16
+    Given a room with dimensions "10" by "10"                                      # features/steps/hoover_functional_steps.py:9
+    And a hoover starting at position "3", "4"                                     # features/steps/hoover_functional_steps.py:15
+    And the following patches of dirt: "1,1;2,2;2,4;4,4"                           # features/steps/hoover_functional_steps.py:21
+    When the hoover moves according to "NESWWNWNESNENNNNN"                         # features/steps/hoover_functional_steps.py:26
+    Then the final position of the hoover should be "2", "9"                       # features/steps/hoover_functional_steps.py:34
+      Assertion Failed: Expected [2, 9] but got [3, 9]
+
+    And the number of cleaned patches should be "4"                                # None
+
+  @skip
+  Scenario Outline: Hoover navigates the room and cleans patches of dirt -- @1.3   # features/hoover.feature:17
+    Given a room with dimensions "7" by "4"                                        # features/steps/hoover_functional_steps.py:9
+    And a hoover starting at position "0", "0"                                     # features/steps/hoover_functional_steps.py:15
+    And the following patches of dirt: "1,1;3,3"                                   # features/steps/hoover_functional_steps.py:21
+    When the hoover moves according to "EENNNNNNWWSSS"                             # features/steps/hoover_functional_steps.py:26
+    Then the final position of the hoover should be "4", "1"                       # features/steps/hoover_functional_steps.py:34
+      Assertion Failed: Expected [4, 1] but got [0, 0]
+
+    And the number of cleaned patches should be "1"                                # None
+
+  Scenario Outline: Invalid parameters handling -- @1.1             # features/hoover.feature:27
+    Given a request with wrong parameters "0" "0" "0" "0" "0,0" "N" # features/steps/hoover_nonfunctional_steps.py:5
+    When I send a request with wrong parameters                     # features/steps/hoover_nonfunctional_steps.py:11
+    Then the service should return a bad request error              # features/steps/hoover_nonfunctional_steps.py:16
+
+  Scenario Outline: Invalid parameters handling -- @1.2               # features/hoover.feature:28
+    Given a request with wrong parameters "0" "0" "-1" "-1" "0,0" "E" # features/steps/hoover_nonfunctional_steps.py:5
+    When I send a request with wrong parameters                       # features/steps/hoover_nonfunctional_steps.py:11
+    Then the service should return a bad request error                # features/steps/hoover_nonfunctional_steps.py:16
+
+  Scenario Outline: Invalid parameters handling -- @1.3               # features/hoover.feature:29
+    Given a request with wrong parameters "0" "0" "-1" "-1" "1,1" "S" # features/steps/hoover_nonfunctional_steps.py:5
+    When I send a request with wrong parameters                       # features/steps/hoover_nonfunctional_steps.py:11
+    Then the service should return a bad request error                # features/steps/hoover_nonfunctional_steps.py:16
+
+  Scenario Outline: Invalid parameters handling -- @1.4              # features/hoover.feature:30
+    Given a request with wrong parameters "0" "0" "1" "-2" "1,1" "N" # features/steps/hoover_nonfunctional_steps.py:5
+    When I send a request with wrong parameters                      # features/steps/hoover_nonfunctional_steps.py:11
+    Then the service should return a bad request error               # features/steps/hoover_nonfunctional_steps.py:16
+      Assertion Failed: Expected 400 but got 200
+
+
+  Scenario Outline: Invalid parameters handling -- @1.5             # features/hoover.feature:31
+    Given a request with wrong parameters "0" "0" "1" "2" "0,0" "W" # features/steps/hoover_nonfunctional_steps.py:5
+    When I send a request with wrong parameters                     # features/steps/hoover_nonfunctional_steps.py:11
+    Then the service should return a bad request error              # features/steps/hoover_nonfunctional_steps.py:16
+
+  Scenario Outline: Invalid parameters handling -- @1.6             # features/hoover.feature:32
+    Given a request with wrong parameters "0" "0" "1" "2" "1,1" "N" # features/steps/hoover_nonfunctional_steps.py:5
+    When I send a request with wrong parameters                     # features/steps/hoover_nonfunctional_steps.py:11
+    Then the service should return a bad request error              # features/steps/hoover_nonfunctional_steps.py:16
+      Assertion Failed: Expected 400 but got 200
+
+
+  Scenario Outline: Invalid parameters handling -- @1.7              # features/hoover.feature:33
+    Given a request with wrong parameters "-1" "0" "1" "2" "1,1" "N" # features/steps/hoover_nonfunctional_steps.py:5
+    When I send a request with wrong parameters                      # features/steps/hoover_nonfunctional_steps.py:11
+    Then the service should return a bad request error               # features/steps/hoover_nonfunctional_steps.py:16
+      Assertion Failed: Expected 400 but got 200
+
+
+  Scenario Outline: Invalid parameters handling -- @1.8              # features/hoover.feature:34
+    Given a request with wrong parameters "2" "-3" "1" "2" "1,1" "N" # features/steps/hoover_nonfunctional_steps.py:5
+    When I send a request with wrong parameters                      # features/steps/hoover_nonfunctional_steps.py:11
+    Then the service should return a bad request error               # features/steps/hoover_nonfunctional_steps.py:16
+      Assertion Failed: Expected 400 but got 200
+
+
+  Scenario Outline: Invalid parameters handling -- @1.9               # features/hoover.feature:35
+    Given a request with wrong parameters "-4" "-3" "1" "2" "1,1" "N" # features/steps/hoover_nonfunctional_steps.py:5
+    When I send a request with wrong parameters                       # features/steps/hoover_nonfunctional_steps.py:11
+    Then the service should return a bad request error                # features/steps/hoover_nonfunctional_steps.py:16
+      Assertion Failed: Expected 400 but got 200
+
+
+  Scenario Outline: Invalid parameters handling -- @1.10              # features/hoover.feature:36
+    Given a request with wrong parameters "5" "5" "-4" "-2" "1,1" "N" # features/steps/hoover_nonfunctional_steps.py:5
+    When I send a request with wrong parameters                       # features/steps/hoover_nonfunctional_steps.py:11
+    Then the service should return a bad request error                # features/steps/hoover_nonfunctional_steps.py:16
+      Assertion Failed: Expected 400 but got 200
+
+
+  Scenario Outline: Invalid parameters handling -- @1.11             # features/hoover.feature:37
+    Given a request with wrong parameters "5" "5" "1" "-1" "1,1" "N" # features/steps/hoover_nonfunctional_steps.py:5
+    When I send a request with wrong parameters                      # features/steps/hoover_nonfunctional_steps.py:11
+    Then the service should return a bad request error               # features/steps/hoover_nonfunctional_steps.py:16
+      Assertion Failed: Expected 400 but got 200
+
+
+  Scenario Outline: Invalid parameters handling -- @1.12              # features/hoover.feature:38
+    Given a request with wrong parameters "5" "5" "-1" "-6" "1,1" "N" # features/steps/hoover_nonfunctional_steps.py:5
+    When I send a request with wrong parameters                       # features/steps/hoover_nonfunctional_steps.py:11
+    Then the service should return a bad request error                # features/steps/hoover_nonfunctional_steps.py:16
+
+  Scenario Outline: Invalid parameters handling -- @1.13            # features/hoover.feature:39
+    Given a request with wrong parameters "5" "5" "5" "5" "1,1" "N" # features/steps/hoover_nonfunctional_steps.py:5
+    When I send a request with wrong parameters                     # features/steps/hoover_nonfunctional_steps.py:11
+    Then the service should return a bad request error              # features/steps/hoover_nonfunctional_steps.py:16
+
+  Scenario Outline: Invalid parameters handling -- @1.14            # features/hoover.feature:40
+    Given a request with wrong parameters "5" "5" "6" "7" "1,1" "N" # features/steps/hoover_nonfunctional_steps.py:5
+    When I send a request with wrong parameters                     # features/steps/hoover_nonfunctional_steps.py:11
+    Then the service should return a bad request error              # features/steps/hoover_nonfunctional_steps.py:16
+      Assertion Failed: Expected 400 but got 200
+
+
+  Scenario Outline: Invalid parameters handling -- @1.15            # features/hoover.feature:41
+    Given a request with wrong parameters "5" "5" "2" "3" "8,6" "N" # features/steps/hoover_nonfunctional_steps.py:5
+    When I send a request with wrong parameters                     # features/steps/hoover_nonfunctional_steps.py:11
+    Then the service should return a bad request error              # features/steps/hoover_nonfunctional_steps.py:16
+      Assertion Failed: Expected 400 but got 200
+
+
+  Scenario Outline: Missing payload information -- @1.1                            # features/hoover.feature:51
+    Given a request with missing payload information "5" "5" "1" "2" "NNESEESWNWW" # features/steps/hoover_nonfunctional_steps.py:21
+    When I send a request with missing payload information                         # features/steps/hoover_nonfunctional_steps.py:26
+    Then the service should return a missing input error                           # features/steps/hoover_nonfunctional_steps.py:32
+      Assertion Failed: Expected error message 'Missing input parameter'
+
+
+  Scenario Outline: Missing payload information -- @1.2                                    # features/hoover.feature:52
+    Given a request with missing payload information "10" "10" "3" "4" "NESWWNWNESNENNNNN" # features/steps/hoover_nonfunctional_steps.py:21
+    When I send a request with missing payload information                                 # features/steps/hoover_nonfunctional_steps.py:26
+    Then the service should return a missing input error                                   # features/steps/hoover_nonfunctional_steps.py:32
+      Assertion Failed: Expected error message 'Missing input parameter'
+
+
+  Scenario Outline: Missing payload information -- @1.3                              # features/hoover.feature:53
+    Given a request with missing payload information "7" "4" "0" "0" "EENNNNNNWWSSS" # features/steps/hoover_nonfunctional_steps.py:21
+    When I send a request with missing payload information                           # features/steps/hoover_nonfunctional_steps.py:26
+    Then the service should return a missing input error                             # features/steps/hoover_nonfunctional_steps.py:32
+      Assertion Failed: Expected error message 'Missing input parameter'
+
+
+  @skip
+  Scenario Outline: Hoover does not move if driving into a wall -- @1.1   # features/hoover.feature:67
+    Given a room with dimensions "5" by "5"                               # features/steps/hoover_functional_steps.py:9
+    And a hoover starting at position "0", "0"                            # features/steps/hoover_functional_steps.py:15
+    And the following patches of dirt: "1,0;2,2;2,3"                      # features/steps/hoover_functional_steps.py:21
+    When the hoover moves according to "S"                                # features/steps/hoover_functional_steps.py:26
+    Then the final position of the hoover should be "0", "0"              # features/steps/hoover_functional_steps.py:34
+    And the number of cleaned patches should be "0"                       # features/steps/hoover_functional_steps.py:40
+
+  @skip
+  Scenario Outline: Hoover does not move if driving into a wall -- @1.2   # features/hoover.feature:68
+    Given a room with dimensions "5" by "5"                               # features/steps/hoover_functional_steps.py:9
+    And a hoover starting at position "0", "0"                            # features/steps/hoover_functional_steps.py:15
+    And the following patches of dirt: "1,0;2,2;2,3"                      # features/steps/hoover_functional_steps.py:21
+    When the hoover moves according to "WW"                               # features/steps/hoover_functional_steps.py:26
+    Then the final position of the hoover should be "0", "0"              # features/steps/hoover_functional_steps.py:34
+    And the number of cleaned patches should be "0"                       # features/steps/hoover_functional_steps.py:40
+
+  @skip
+  Scenario Outline: Hoover does not move if driving into a wall -- @1.3   # features/hoover.feature:69
+    Given a room with dimensions "5" by "5"                               # features/steps/hoover_functional_steps.py:9
+    And a hoover starting at position "4", "4"                            # features/steps/hoover_functional_steps.py:15
+    And the following patches of dirt: "1,0;2,2;2,3"                      # features/steps/hoover_functional_steps.py:21
+    When the hoover moves according to "NN"                               # features/steps/hoover_functional_steps.py:26
+    Then the final position of the hoover should be "4", "4"              # features/steps/hoover_functional_steps.py:34
+    And the number of cleaned patches should be "0"                       # features/steps/hoover_functional_steps.py:40
+      Assertion Failed: Expected 0 but got 1
+
+
+  @skip
+  Scenario Outline: Hoover does not move if driving into a wall -- @1.4   # features/hoover.feature:70
+    Given a room with dimensions "5" by "5"                               # features/steps/hoover_functional_steps.py:9
+    And a hoover starting at position "4", "4"                            # features/steps/hoover_functional_steps.py:15
+    And the following patches of dirt: "1,0;2,2;2,3"                      # features/steps/hoover_functional_steps.py:21
+    When the hoover moves according to "E"                                # features/steps/hoover_functional_steps.py:26
+    Then the final position of the hoover should be "4", "4"              # features/steps/hoover_functional_steps.py:34
+    And the number of cleaned patches should be "0"                       # features/steps/hoover_functional_steps.py:40
+      Assertion Failed: Expected 0 but got 1
+
+
+  @skip
+  Scenario Outline: Hoover does not move if driving into a wall -- @1.5   # features/hoover.feature:71
+    Given a room with dimensions "5" by "5"                               # features/steps/hoover_functional_steps.py:9
+    And a hoover starting at position "3", "3"                            # features/steps/hoover_functional_steps.py:15
+    And the following patches of dirt: "1,0;2,2;2,3"                      # features/steps/hoover_functional_steps.py:21
+    When the hoover moves according to "NN"                               # features/steps/hoover_functional_steps.py:26
+    Then the final position of the hoover should be "3", "4"              # features/steps/hoover_functional_steps.py:34
+    And the number of cleaned patches should be "0"                       # features/steps/hoover_functional_steps.py:40
+
+  @skip
+  Scenario Outline: Hoover does not move if driving into a wall -- @1.6   # features/hoover.feature:72
+    Given a room with dimensions "5" by "5"                               # features/steps/hoover_functional_steps.py:9
+    And a hoover starting at position "3", "3"                            # features/steps/hoover_functional_steps.py:15
+    And the following patches of dirt: "1,0;2,2;2,3"                      # features/steps/hoover_functional_steps.py:21
+    When the hoover moves according to "EE"                               # features/steps/hoover_functional_steps.py:26
+    Then the final position of the hoover should be "4", "3"              # features/steps/hoover_functional_steps.py:34
+    And the number of cleaned patches should be "0"                       # features/steps/hoover_functional_steps.py:40
+
